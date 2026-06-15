@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { SITE_URL } from "@/lib/config";
 import "./globals.css";
 
 const geist = Geist({
@@ -8,10 +9,8 @@ const geist = Geist({
   subsets: ["latin"],
 });
 
-const BASE_URL = "https://serfp-web.vercel.app";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "SerFP — Tu referencia para estudiar FP en España",
     template: "%s — SerFP",
@@ -21,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: BASE_URL,
+    url: SITE_URL,
     siteName: "SerFP",
     title: "SerFP — Tu referencia para estudiar FP en España",
     description: "Información clara, honesta y útil sobre FP en España. Sin humo.",
