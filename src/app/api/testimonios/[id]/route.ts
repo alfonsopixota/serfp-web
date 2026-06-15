@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
-import { getAllTestimonios, writeTestimonios, Testimonio } from "@/lib/testimonios";
+import { updateTestimonio, deleteTestimonio } from "@/lib/testimonios";
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const authed = await isAuthenticated();
@@ -8,14 +8,13 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const { id } = await params;
   const body = await req.json();
-  const data = getAllTestimonios();
-  const index = data.findIndex((t: Testimonio) => t.id === id);
+  const ok = await updateTestimonio(id, body);
 
-  if (index === -1) return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+  if (!ok) {
+    return NextResponse.json({ error: "Error al actualizar" }, { status: 500 });
+  }
 
-  data[index] = { ...data[index], ...body };
-  writeTestimonios(data);
-  return NextResponse.json(data[index]);
+  return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -23,11 +22,11 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if (!authed) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const { id } = await params;
-  const data = getAllTestimonios();
-  const filtered = data.filter((t: Testimonio) => t.id !== id);
+  const ok = await deleteTestimonio(id);
 
-  if (filtered.length === data.length) return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+  if (!ok) {
+    return NextResponse.json({ error: "Error al eliminar" }, { status: 500 });
+  }
 
-  writeTestimonios(filtered);
   return NextResponse.json({ ok: true });
 }

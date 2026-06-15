@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { getSubscriberCount } from "@/lib/brevo";
-import { getAllPosts } from "@/lib/posts";
-import { getAllTestimonios } from "@/lib/testimonios";
+import { getAllPostsFromDB } from "@/lib/posts";
+import { getAllTestimoniosFromDB } from "@/lib/testimonios";
 
 export const metadata = { title: "Panel — SerFP" };
 
@@ -12,8 +12,8 @@ export default async function DashboardPage() {
 
   const [subscriberCount, posts, testimonios] = await Promise.all([
     getSubscriberCount(),
-    getAllPosts(),
-    getAllTestimonios(),
+    getAllPostsFromDB(),
+    getAllTestimoniosFromDB(),
   ]);
 
   return (

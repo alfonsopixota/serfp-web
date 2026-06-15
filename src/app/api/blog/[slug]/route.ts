@@ -1,24 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
-import { getPost } from "@/lib/posts";
-import { buildFrontmatter } from "@/lib/frontmatter";
-import fs from "fs";
-import path from "path";
-
-const POSTS_DIR = path.join(process.cwd(), "content/blog");
+import { getPostFromDB, updatePost, deletePost } from "@/lib/posts";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const authed = await isAuthenticated();
   if (!authed) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const { slug } = await params;
+  const post = await getPostFromDB(slug);
 
-  try {
-    const post = getPost(slug);
-    return NextResponse.json(post);
-  } catch {
+  if (!post) {
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
   }
+
+  return NextResponse.json(post);
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -26,22 +21,20 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
   if (!authed) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const { slug } = await params;
-  const filePath = path.join(POSTS_DIR, `${slug}.md`);
-
-  if (!fs.existsSync(filePath)) {
-    return NextResponse.json({ error: "Artículo no encontrado" }, { status: 404 });
-  }
-
   const { titulo, descripcion, fecha, categoria, contenido } = await req.json();
 
-  const frontmatter = buildFrontmatter({
-    titulo: titulo ?? "",
-    descripcion: descripcion ?? "",
-    fecha: fecha ?? new Date().toISOString().split("T")[0],
-    categoria: categoria ?? "Guías",
+  const ok = await updatePost(slug, {
+    titulo,
+    descripcion,
+    fecha,
+    categoria,
+    contenido,
   });
 
-  fs.writeFileSync(filePath, frontmatter + contenido, "utf-8");
+  if (!ok) {
+    return NextResponse.json({ error: "Error al guardar" }, { status: 500 });
+  }
+
   return NextResponse.json({ ok: true });
 }
 
@@ -50,12 +43,11 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if (!authed) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const { slug } = await params;
-  const filePath = path.join(POSTS_DIR, `${slug}.md`);
+  const ok = await deletePost(slug);
 
-  if (!fs.existsSync(filePath)) {
-    return NextResponse.json({ error: "Artículo no encontrado" }, { status: 404 });
+  if (!ok) {
+    return NextResponse.json({ error: "Error al eliminar" }, { status: 500 });
   }
 
-  fs.unlinkSync(filePath);
   return NextResponse.json({ ok: true });
 }

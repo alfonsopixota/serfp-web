@@ -1,11 +1,11 @@
-import { getAllPosts } from "@/lib/posts";
+import { getAllPostsFromDB } from "@/lib/posts";
 import Link from "next/link";
 import DeletePostButton from "@/components/DeletePostButton";
 
 export const metadata = { title: "Blog — Dashboard" };
 
-export default function BlogDashboard() {
-  const posts = getAllPosts();
+export default async function BlogDashboard() {
+  const posts = await getAllPostsFromDB();
 
   return (
     <div>

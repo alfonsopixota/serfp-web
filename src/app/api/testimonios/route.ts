@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
-import { getAllTestimonios, writeTestimonios } from "@/lib/testimonios";
+import { getAllTestimoniosFromDB, createTestimonio } from "@/lib/testimonios";
 
 export async function GET() {
-  const data = getAllTestimonios();
+  const data = await getAllTestimoniosFromDB();
   return NextResponse.json(data);
 }
 
@@ -12,9 +12,11 @@ export async function POST(req: NextRequest) {
   if (!authed) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await req.json();
-  const data = getAllTestimonios();
-  const nuevo = { id: crypto.randomUUID(), ...body };
-  data.push(nuevo);
-  writeTestimonios(data);
+  const nuevo = await createTestimonio(body);
+
+  if (!nuevo) {
+    return NextResponse.json({ error: "Error al crear testimonio" }, { status: 500 });
+  }
+
   return NextResponse.json(nuevo);
 }

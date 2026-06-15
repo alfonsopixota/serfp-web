@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
-import { buildFrontmatter } from "@/lib/frontmatter";
-import fs from "fs";
-import path from "path";
-
-const POSTS_DIR = path.join(process.cwd(), "content/blog");
+import { createPost } from "@/lib/posts";
 
 export async function POST(req: NextRequest) {
   const authed = await isAuthenticated();
@@ -17,21 +13,19 @@ export async function POST(req: NextRequest) {
   }
 
   const safeSlug = slug.replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
-  const filePath = path.join(POSTS_DIR, `${safeSlug}.md`);
 
-  if (fs.existsSync(filePath)) {
-    return NextResponse.json({ error: "Ya existe un artículo con ese slug" }, { status: 409 });
-  }
-
-  const frontmatter = buildFrontmatter({
+  const ok = await createPost({
+    slug: safeSlug,
     titulo,
     descripcion: descripcion ?? "",
     fecha: fecha ?? new Date().toISOString().split("T")[0],
     categoria: categoria ?? "Guías",
+    contenido,
   });
 
-  fs.mkdirSync(POSTS_DIR, { recursive: true });
-  fs.writeFileSync(filePath, frontmatter + contenido, "utf-8");
+  if (!ok) {
+    return NextResponse.json({ error: "Error al crear artículo" }, { status: 500 });
+  }
 
   return NextResponse.json({ ok: true, slug: safeSlug });
 }

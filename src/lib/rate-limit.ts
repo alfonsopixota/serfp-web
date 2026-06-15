@@ -1,9 +1,20 @@
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
-}
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-const store = new Map<string, RateLimitEntry>();
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+let ratelimit: Ratelimit | null = null;
+
+if (redisUrl && redisToken) {
+  const redis = new Redis({ url: redisUrl, token: redisToken });
+
+  ratelimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(5, "60 s"), // 5 requests per 60 seconds
+    analytics: true,
+  });
+}
 
 function getClientIp(req: Request): string {
   const xff = req.headers.get("x-forwarded-for");
@@ -11,20 +22,30 @@ function getClientIp(req: Request): string {
   return "unknown";
 }
 
-export function checkRateLimit(
+// In-memory fallback when Upstash is not configured
+const memoryStore = new Map<string, { count: number; resetAt: number }>();
+
+export async function checkRateLimit(
   req: Request,
   key: string,
   maxRequests: number,
   windowMs: number
-): { allowed: boolean; remaining: number } {
+): Promise<{ allowed: boolean; remaining: number }> {
   const ip = getClientIp(req);
-  const now = Date.now();
   const fullKey = `${key}:${ip}`;
 
-  const entry = store.get(fullKey);
+  // Use Upstash if configured
+  if (ratelimit) {
+    const { success, remaining } = await ratelimit.limit(fullKey);
+    return { allowed: success, remaining };
+  }
+
+  // Fallback: in-memory (resets on cold start)
+  const now = Date.now();
+  const entry = memoryStore.get(fullKey);
 
   if (!entry || now > entry.resetAt) {
-    store.set(fullKey, { count: 1, resetAt: now + windowMs });
+    memoryStore.set(fullKey, { count: 1, resetAt: now + windowMs });
     return { allowed: true, remaining: maxRequests - 1 };
   }
 
