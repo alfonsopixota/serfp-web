@@ -43,3 +43,6 @@ next-env.d.ts
 
 # local only
 DOCUMENTO_TECNICO.md
+
+# dashboard data (local only)
+data/
