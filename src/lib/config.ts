@@ -1,1 +1,1 @@
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://serfp.es";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://serfp-web.vercel.app";
