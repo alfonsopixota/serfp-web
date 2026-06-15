@@ -10,21 +10,19 @@ export interface Testimonio {
   texto: string;
 }
 
-const CONTENT_FILE = path.join(process.cwd(), "content", "testimonios.json");
-const DATA_FILE = path.join(process.cwd(), "data", "testimonios.json");
-
-function getDataFile(): string {
-  if (fs.existsSync(DATA_FILE)) return DATA_FILE;
-  return CONTENT_FILE;
-}
+const TESTIMONIOS_FILE = path.join(process.cwd(), "content", "testimonios.json");
 
 export function getAllTestimonios(): Testimonio[] {
   try {
-    const file = getDataFile();
-    return JSON.parse(fs.readFileSync(file, "utf-8"));
+    return JSON.parse(fs.readFileSync(TESTIMONIOS_FILE, "utf-8"));
   } catch {
     return [];
   }
+}
+
+export function writeTestimonios(data: Testimonio[]): void {
+  fs.mkdirSync(path.dirname(TESTIMONIOS_FILE), { recursive: true });
+  fs.writeFileSync(TESTIMONIOS_FILE, JSON.stringify(data, null, 2), "utf-8");
 }
 
 export function getTestimonioStats() {

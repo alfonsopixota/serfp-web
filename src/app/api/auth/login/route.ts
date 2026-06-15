@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { setAuthCookie, COOKIE_NAME, MAX_AGE } from "@/lib/auth";
+import { verifyPassword } from "@/lib/password";
 
 export async function POST(req: NextRequest) {
   const rateLimit = checkRateLimit(req, "login", 10, 15 * 60 * 1000);
@@ -9,13 +10,17 @@ export async function POST(req: NextRequest) {
   }
 
   const { password } = await req.json();
-  const correctPassword = process.env.DASHBOARD_PASSWORD;
+  const storedPassword = process.env.DASHBOARD_PASSWORD;
 
-  if (!correctPassword) {
+  if (!storedPassword) {
     return NextResponse.json({ error: "Dashboard no configurado" }, { status: 500 });
   }
 
-  if (password !== correctPassword) {
+  const isValid = storedPassword.includes(":")
+    ? verifyPassword(password, storedPassword)
+    : password === storedPassword;
+
+  if (!isValid) {
     return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
   }
 
