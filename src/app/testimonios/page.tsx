@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -125,12 +126,12 @@ export default function TestimoniosPage() {
               Únete a la comunidad y cuéntanos cómo fue tu experiencia real
               estudiando FP.
             </p>
-            <a
+            <Link
               href="/#newsletter"
               className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
             >
               Unirme a la comunidad
-            </a>
+            </Link>
           </div>
         </div>
       </main>

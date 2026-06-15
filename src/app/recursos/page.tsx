@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -130,12 +131,12 @@ export default function RecursosPage() {
               Publicamos nuevas guías y herramientas cada semana. Únete a la
               comunidad y te avisamos cuando salga contenido nuevo.
             </p>
-            <a
+            <Link
               href="/#newsletter"
               className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
             >
               Únete gratis
-            </a>
+            </Link>
           </div>
         </div>
       </main>

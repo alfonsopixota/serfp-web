@@ -120,12 +120,12 @@ export default async function PostPage({ params }: Props) {
             <p className="text-slate-600 text-sm mb-5">
               Únete a la comunidad SerFP y recibe cada semana los mejores contenidos sobre FP.
             </p>
-            <a
+            <Link
               href="/#newsletter"
               className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
             >
               Únete gratis
-            </a>
+            </Link>
           </div>
         </div>
       </main>

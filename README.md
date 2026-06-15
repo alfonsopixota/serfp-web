@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SerFP — Tu referencia para estudiar FP en España
 
-## Getting Started
+Sitio web informativo sobre Formación Profesional en España. Información clara, honesta y sin humo.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 16** + **React 19** + **TypeScript**
+- **Tailwind CSS 4** con plugin de tipografía
+- **MDX** para artículos del blog (`next-mdx-remote`)
+- **Vercel** para despliegue y analytics
+
+## Estructura
+
+```
+src/
+├── app/
+│   ├── blog/              # Listado y artículos del blog
+│   ├── empleabilidad/     # Análisis de demanda laboral por sector
+│   ├── testimonios/       # Experiencias reales de estudiantes
+│   ├── recursos/          # Guías, checklists y comparativas
+│   ├── api/newsletter/    # Endpoint para suscripción (Brevo)
+│   └── page.tsx           # Landing page principal
+├── components/            # Componentes UI reutilizables
+└── lib/posts.ts           # Utilidades para leer contenido Markdown
+
+content/
+└── blog/                  # Artículos en formato Markdown
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contenido
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Blog**: artículos sobre FP (guías, mitos, empleabilidad)
+- **Empleabilidad**: datos de demanda laboral, salarios y tiempo hasta el primer empleo por familia profesional
+- **Testimonios**: experiencias reales de estudiantes de FP en España
+- **Recursos**: guías prácticas, checklists y comparativas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Desarrollo
 
-## Learn More
+```bash
+# Instalar dependencias
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# Servidor de desarrollo
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Build de producción
+npm run build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Lint
+npm run lint
+```
 
-## Deploy on Vercel
+## Variables de entorno
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Crea un archivo `.env.local` con:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+BREVO_API_KEY=tu_api_key_de_brevo
+BREVO_LIST_ID=2
+```
+
+- `BREVO_API_KEY`: API key de Brevo (Settings > API Keys > SMTP)
+- `BREVO_LIST_ID`: ID de la lista de suscriptores en Brevo
+
+## Despliegue
+
+El proyecto está configurado para desplegarse en Vercel. Cada push a `main` genera un despliegue automático.

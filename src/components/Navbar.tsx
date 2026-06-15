@@ -43,12 +43,12 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <a
+        <Link
           href="/#newsletter"
           className="hidden md:inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           Únete gratis
-        </a>
+        </Link>
 
         {/* Mobile menu button */}
         <button
@@ -84,13 +84,13 @@ export default function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <a
+            <Link
               href="/#newsletter"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex justify-center bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors"
             >
               Únete gratis
-            </a>
+            </Link>
           </nav>
         </div>
       )}
