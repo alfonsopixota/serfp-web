@@ -25,13 +25,11 @@ export const metadata: Metadata = {
     siteName: "SerFP",
     title: "SerFP — Tu referencia para estudiar FP en España",
     description: "Información clara, honesta y útil sobre FP en España. Sin humo.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "SerFP" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "SerFP — Tu referencia para estudiar FP en España",
     description: "Información clara, honesta y útil sobre FP en España.",
-    images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
   icons: {

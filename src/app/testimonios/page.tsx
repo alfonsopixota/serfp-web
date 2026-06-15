@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getAllTestimonios, getTestimonioStats } from "@/lib/testimonios";
 
 export const metadata: Metadata = {
   title: "Testimonios — SerFP",
@@ -9,58 +10,9 @@ export const metadata: Metadata = {
     "Historias reales de alumnos de FP en España. Lo que nadie te cuenta sobre estudiar Formación Profesional.",
 };
 
-const testimonios = [
-  {
-    nombre: "Marta G.",
-    ciclo: "CFGS Desarrollo de Aplicaciones Web",
-    año: "2023",
-    provincia: "Madrid",
-    texto:
-      "Tardé dos años en decidirme por la FP porque pensaba que era una opción de segunda. Ojalá hubiera encontrado antes esta comunidad. En 8 meses de terminar tenía trabajo y ganaba más que muchos compañeros con carrera universitaria. El ciclo es muy exigente, más de lo que la gente cree, pero cada hora que pasé en el aula valió la pena.",
-  },
-  {
-    nombre: "Carlos R.",
-    ciclo: "CFGM Electromecánica de Vehículos",
-    año: "2024",
-    provincia: "Sevilla",
-    texto:
-      "Nadie me dijo la verdad sobre las FCT ni sobre cuánto influye el centro que eliges. Aquí encontré información real de alumnos que habían pasado por lo mismo. Las prácticas en el taller fueron donde aprendí de verdad. Me contrataron antes de terminar.",
-  },
-  {
-    nombre: "Lucía P.",
-    ciclo: "CFGS Educación Infantil",
-    año: "2024",
-    provincia: "Barcelona",
-    texto:
-      "Estaba entre una carrera y la FP y no sabía qué hacer. Gracias a los testimonios que leí entendí cuál era la salida real de cada opción. Al terminar encontré plaza en una escuela infantil en tres meses. La demanda en este sector es real, pero hay que estar dispuesta a trabajar de verdad.",
-  },
-  {
-    nombre: "Iván M.",
-    ciclo: "CFGS Sistemas Microinformáticos y Redes",
-    año: "2022",
-    provincia: "Valencia",
-    texto:
-      "Lo que más me sorprendió fue la cantidad de empresas que venían al centro a buscar alumnos antes de que termináramos el ciclo. Acabé en una empresa de hosting como técnico de soporte y en dos años pasé a ser responsable de infraestructura. La FP te enseña a trabajar, no solo a estudiar.",
-  },
-  {
-    nombre: "Ana S.",
-    ciclo: "CFGM Cuidados Auxiliares de Enfermería",
-    año: "2023",
-    provincia: "Zaragoza",
-    texto:
-      "Después de 10 años trabajando en retail decidí cambiar de sector. Tenía miedo de volver a estudiar con más de 30 años pero fue la mejor decisión de mi vida. Mis compañeros de clase eran de todas las edades y el ambiente era genial. Hoy trabajo en una residencia y me levanto con ganas de ir a trabajar.",
-  },
-  {
-    nombre: "Diego F.",
-    ciclo: "CFGS Administración y Finanzas",
-    año: "2024",
-    provincia: "Bilbao",
-    texto:
-      "El ciclo está muy bien orientado al mercado real. Aprendimos a usar las herramientas que usan las empresas de verdad, no simulaciones. El módulo de FCT lo hice en una asesoría y me quedé a trabajar con ellos. Si tuviera que repetir, elegiría lo mismo.",
-  },
-];
-
 export default function TestimoniosPage() {
+  const testimonios = getAllTestimonios();
+  const stats = getTestimonioStats();
   return (
     <>
       <Navbar />
@@ -83,15 +35,15 @@ export default function TestimoniosPage() {
           {/* Stats */}
           <div className="flex flex-wrap gap-6 py-8 mb-8 border-y border-slate-100">
             <div>
-              <p className="text-2xl font-black text-slate-900">6</p>
+              <p className="text-2xl font-black text-slate-900">{stats.total}</p>
               <p className="text-xs text-slate-500 uppercase tracking-wide font-medium">Testimonios publicados</p>
             </div>
             <div>
-              <p className="text-2xl font-black text-slate-900">6</p>
+              <p className="text-2xl font-black text-slate-900">{stats.ciclos}</p>
               <p className="text-xs text-slate-500 uppercase tracking-wide font-medium">Ciclos distintos</p>
             </div>
             <div>
-              <p className="text-2xl font-black text-slate-900">5</p>
+              <p className="text-2xl font-black text-slate-900">{stats.provincias}</p>
               <p className="text-xs text-slate-500 uppercase tracking-wide font-medium">Provincias</p>
             </div>
           </div>

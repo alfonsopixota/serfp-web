@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  const rateLimit = checkRateLimit(req, "newsletter", 5, 60 * 1000);
+  if (!rateLimit.allowed) {
+    return NextResponse.json({ error: "Demasiadas solicitudes. Inténtalo más tarde." }, { status: 429 });
+  }
+
   let email: string;
   try {
     const body = await req.json();
@@ -14,7 +20,7 @@ export async function POST(req: NextRequest) {
   }
 
   const apiKey = process.env.BREVO_API_KEY;
-  const listId = process.env.BREVO_LIST_ID ?? "2";
+  const listId = process.env.BREVO_LIST_ID ?? "3";
 
   if (!apiKey) {
     console.warn("[newsletter] BREVO_API_KEY no configurada — devolviendo OK sin registrar");

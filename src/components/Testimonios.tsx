@@ -1,28 +1,7 @@
-const testimonios = [
-  {
-    nombre: "Marta G.",
-    ciclo: "CFGS Desarrollo de Aplicaciones Web",
-    texto:
-      "Tardé dos años en decidirme por la FP porque pensaba que era una opción de segunda. Ojalá hubiera encontrado antes esta comunidad. En 8 meses tenía trabajo y ganaba más que muchos compañeros con carrera universitaria.",
-    años: "2023",
-  },
-  {
-    nombre: "Carlos R.",
-    ciclo: "CFGM Electromecánica de Vehículos",
-    texto:
-      "Nadie me dijo la verdad sobre las FCT ni sobre cuánto influye el centro que eliges. Aquí encontré información real de alumnos que habían pasado por lo mismo. Eso no tiene precio cuando estás tomando una decisión así.",
-    años: "2024",
-  },
-  {
-    nombre: "Lucía P.",
-    ciclo: "CFGS Educación Infantil",
-    texto:
-      "Estaba entre una carrera y la FP y no sabía qué hacer. Gracias a los testimonios que leí aquí entendí cuál era la salida real de cada opción y tomé la decisión sin arrepentirme. Al terminar encontré plaza en tres meses.",
-    años: "2024",
-  },
-];
+import { getAllTestimonios } from "@/lib/testimonios";
 
 export default function Testimonios() {
+  const testimonios = getAllTestimonios().slice(0, 3);
   return (
     <section id="testimonios" className="py-20 px-4 sm:px-6 bg-slate-50">
       <div className="max-w-6xl mx-auto">

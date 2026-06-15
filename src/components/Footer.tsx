@@ -70,10 +70,10 @@ export default function Footer() {
         <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
           <p>© {year} SerFP. Todos los derechos reservados.</p>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="/aviso-legal" className="hover:text-white transition-colors">
               Aviso legal
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="/privacidad" className="hover:text-white transition-colors">
               Privacidad
             </a>
           </div>

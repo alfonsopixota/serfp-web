@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
+import { buildFrontmatter } from "@/lib/frontmatter";
 import fs from "fs";
 import path from "path";
 
@@ -22,18 +23,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Ya existe un artículo con ese slug" }, { status: 409 });
   }
 
-  const frontmatter = [
-    "---",
-    `titulo: "${titulo}"`,
-    `descripcion: "${descripcion ?? ""}"`,
-    `fecha: "${fecha ?? new Date().toISOString().split("T")[0]}"`,
-    `categoria: "${categoria ?? "Guías"}"`,
-    "---\n",
-    contenido,
-  ].join("\n");
+  const frontmatter = buildFrontmatter({
+    titulo,
+    descripcion: descripcion ?? "",
+    fecha: fecha ?? new Date().toISOString().split("T")[0],
+    categoria: categoria ?? "Guías",
+  });
 
   fs.mkdirSync(POSTS_DIR, { recursive: true });
-  fs.writeFileSync(filePath, frontmatter, "utf-8");
+  fs.writeFileSync(filePath, frontmatter + contenido, "utf-8");
 
   return NextResponse.json({ ok: true, slug: safeSlug });
 }

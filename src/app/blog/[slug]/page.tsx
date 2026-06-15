@@ -58,8 +58,34 @@ export default async function PostPage({ params }: Props) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.titulo,
+    description: post.descripcion,
+    datePublished: post.fecha,
+    author: {
+      "@type": "Organization",
+      name: "SerFP",
+      url: "https://serfp.es",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "SerFP",
+      url: "https://serfp.es",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://serfp.es/blog/${slug}`,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
       <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen">
         <div className="max-w-2xl mx-auto">

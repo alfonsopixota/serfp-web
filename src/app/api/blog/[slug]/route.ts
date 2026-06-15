@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { getPost } from "@/lib/posts";
+import { buildFrontmatter } from "@/lib/frontmatter";
 import fs from "fs";
 import path from "path";
 
@@ -33,17 +34,14 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
 
   const { titulo, descripcion, fecha, categoria, contenido } = await req.json();
 
-  const frontmatter = [
-    "---",
-    `titulo: "${titulo}"`,
-    `descripcion: "${descripcion ?? ""}"`,
-    `fecha: "${fecha ?? new Date().toISOString().split("T")[0]}"`,
-    `categoria: "${categoria ?? "Guías"}"`,
-    "---\n",
-    contenido,
-  ].join("\n");
+  const frontmatter = buildFrontmatter({
+    titulo: titulo ?? "",
+    descripcion: descripcion ?? "",
+    fecha: fecha ?? new Date().toISOString().split("T")[0],
+    categoria: categoria ?? "Guías",
+  });
 
-  fs.writeFileSync(filePath, frontmatter, "utf-8");
+  fs.writeFileSync(filePath, frontmatter + contenido, "utf-8");
   return NextResponse.json({ ok: true });
 }
 

@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { getSubscriberCount } from "@/lib/brevo";
+import { getAllPosts } from "@/lib/posts";
+import { getAllTestimonios } from "@/lib/testimonios";
 
 export const metadata = { title: "Panel — SerFP" };
 
@@ -8,7 +10,11 @@ export default async function DashboardPage() {
   const authed = await isAuthenticated();
   if (!authed) redirect("/dashboard/login");
 
-  const subscriberCount = await getSubscriberCount();
+  const [subscriberCount, posts, testimonios] = await Promise.all([
+    getSubscriberCount(),
+    getAllPosts(),
+    getAllTestimonios(),
+  ]);
 
   return (
     <div>
@@ -22,12 +28,12 @@ export default async function DashboardPage() {
         </div>
         <div className="bg-white rounded-2xl border border-slate-100 p-6">
           <p className="text-sm text-slate-500 font-medium mb-1">Artículos publicados</p>
-          <p className="text-3xl font-black text-slate-900">3</p>
+          <p className="text-3xl font-black text-slate-900">{posts.length}</p>
           <p className="text-xs text-slate-400 mt-1">En el blog</p>
         </div>
         <div className="bg-white rounded-2xl border border-slate-100 p-6">
           <p className="text-sm text-slate-500 font-medium mb-1">Testimonios</p>
-          <p className="text-3xl font-black text-slate-900">6</p>
+          <p className="text-3xl font-black text-slate-900">{testimonios.length}</p>
           <p className="text-xs text-slate-400 mt-1">Experiencias reales</p>
         </div>
       </div>
