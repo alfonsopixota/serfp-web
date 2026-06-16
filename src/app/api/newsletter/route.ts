@@ -7,7 +7,7 @@ export async function OPTIONS() {
 }
 
 export async function POST(req: NextRequest) {
-  const rateLimit = checkRateLimit(req, "newsletter", 5, 60 * 1000);
+  const rateLimit = await checkRateLimit(req, "newsletter", 5, 60 * 1000);
   if (!rateLimit.allowed) {
     return corsHeaders(NextResponse.json({ error: "Demasiadas solicitudes. Inténtalo más tarde." }, { status: 429 }));
   }

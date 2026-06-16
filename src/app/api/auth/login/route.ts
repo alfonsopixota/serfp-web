@@ -4,7 +4,7 @@ import { setAuthCookie, COOKIE_NAME, MAX_AGE } from "@/lib/auth";
 import { verifyPassword } from "@/lib/password";
 
 export async function POST(req: NextRequest) {
-  const rateLimit = checkRateLimit(req, "login", 10, 15 * 60 * 1000);
+  const rateLimit = await checkRateLimit(req, "login", 10, 15 * 60 * 1000);
   if (!rateLimit.allowed) {
     return NextResponse.json({ error: "Demasiados intentos. Espera 15 minutos." }, { status: 429 });
   }
