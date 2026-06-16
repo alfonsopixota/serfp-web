@@ -102,7 +102,7 @@ export async function getPostFromDB(slug: string): Promise<Post | null> {
   };
 }
 
-export async function createPost(post: O<PostMeta, "tiempoLectura"> & { contenido: string }): Promise<boolean> {
+export async function createPost(post: Omit<PostMeta, "tiempoLectura"> & { contenido: string }): Promise<boolean> {
   const { error } = await supabase.from("blog_posts").insert({
     slug: post.slug,
     titulo: post.titulo,

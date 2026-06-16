@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { SITE_URL } from "@/lib/config";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: `${post.titulo} — SerFP`,
       description: post.descripcion,
+      alternates: { canonical: `/blog/${slug}` },
       openGraph: {
         title: post.titulo,
         description: post.descripcion,
@@ -67,17 +69,18 @@ export default async function PostPage({ params }: Props) {
     author: {
       "@type": "Organization",
       name: "SerFP",
-      url: "https://serfp.es",
+      url: "${SITE_URL}",
     },
     publisher: {
       "@type": "Organization",
       name: "SerFP",
-      url: "https://serfp.es",
+      url: "${SITE_URL}",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://serfp.es/blog/${slug}`,
+      "@id": `${SITE_URL}/blog/${slug}`,
     },
+    url: `${SITE_URL}/blog/${slug}`,
   };
 
   return (
