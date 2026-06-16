@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 
 const POSTS_DIR = path.join(process.cwd(), "content/blog");
 
@@ -63,7 +63,7 @@ export function getPost(slug: string): Post {
 // --- Supabase CRUD ---
 
 export async function getAllPostsFromDB(): Promise<PostMeta[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("blog_posts")
     .select("*")
     .order("fecha", { ascending: false });
@@ -82,7 +82,7 @@ export async function getAllPostsFromDB(): Promise<PostMeta[]> {
 }
 
 export async function getPostFromDB(slug: string): Promise<Post | null> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("blog_posts")
     .select("*")
     .eq("slug", slug)
@@ -103,7 +103,7 @@ export async function getPostFromDB(slug: string): Promise<Post | null> {
 }
 
 export async function createPost(post: Omit<PostMeta, "tiempoLectura"> & { contenido: string }): Promise<boolean> {
-  const { error } = await supabase.from("blog_posts").insert({
+  const { error } = await getSupabase().from("blog_posts").insert({
     slug: post.slug,
     titulo: post.titulo,
     descripcion: post.descripcion,
@@ -115,7 +115,7 @@ export async function createPost(post: Omit<PostMeta, "tiempoLectura"> & { conte
 }
 
 export async function updatePost(slug: string, post: Partial<Post> & { contenido?: string }): Promise<boolean> {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from("blog_posts")
     .update({
       titulo: post.titulo,
@@ -129,6 +129,6 @@ export async function updatePost(slug: string, post: Partial<Post> & { contenido
 }
 
 export async function deletePost(slug: string): Promise<boolean> {
-  const { error } = await supabase.from("blog_posts").delete().eq("slug", slug);
+  const { error } = await getSupabase().from("blog_posts").delete().eq("slug", slug);
   return !error;
 }

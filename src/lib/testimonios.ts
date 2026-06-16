@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 
 export interface Testimonio {
   id: string;
@@ -25,7 +25,7 @@ export function getAllTestimonios(): Testimonio[] {
 // --- Supabase CRUD ---
 
 export async function getAllTestimoniosFromDB(): Promise<Testimonio[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("testimonios")
     .select("*")
     .order("created_at", { ascending: false });
@@ -43,7 +43,7 @@ export async function getAllTestimoniosFromDB(): Promise<Testimonio[]> {
 }
 
 export async function createTestimonio(t: Omit<Testimonio, "id">): Promise<Testimonio | null> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("testimonios")
     .insert({
       nombre: t.nombre,
@@ -68,7 +68,7 @@ export async function createTestimonio(t: Omit<Testimonio, "id">): Promise<Testi
 }
 
 export async function updateTestimonio(id: string, t: Partial<Testimonio>): Promise<boolean> {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from("testimonios")
     .update({
       nombre: t.nombre,
@@ -82,7 +82,7 @@ export async function updateTestimonio(id: string, t: Partial<Testimonio>): Prom
 }
 
 export async function deleteTestimonio(id: string): Promise<boolean> {
-  const { error } = await supabase.from("testimonios").delete().eq("id", id);
+  const { error } = await getSupabase().from("testimonios").delete().eq("id", id);
   return !error;
 }
 
