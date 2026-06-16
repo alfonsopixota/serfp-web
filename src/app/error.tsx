@@ -12,7 +12,6 @@ export default function Error({
 }) {
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-      // @ts-expect-error — instalar @sentry/nextjs para activar
       import("@sentry/nextjs").then(({ captureException }) => captureException(error));
     }
   }, [error]);

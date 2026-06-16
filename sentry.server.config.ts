@@ -1,4 +1,3 @@
-// @ts-expect-error — instalar @sentry/nextjs para activar
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
